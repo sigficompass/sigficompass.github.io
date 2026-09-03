@@ -11,7 +11,7 @@
 <meta property="og:description" content="dBm, ms ve Mbps değerlerini canlı takip edin. Uygun Yön göstergesiyle bağlantınız için en iyi yönü bulun.">
 <meta property="og:url" content="https://sigficompass.github.io/">
 <meta property="og:site_name" content="SIG-FI Compass">
-<meta property="og:image" content="assets/og-cover.jpg">
+<meta property="og:image" content="og-cover.jpg">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="SIG-FI Compass - Uygun Yön'ü Bulmanın Pusulası">
@@ -250,7 +250,7 @@ footer a:hover{color:var(--ember-2);}
 
   <div class="hero-visual">
     <span class="badge">CANLI ÖLÇÜM</span>
-    <img src="assets/hero-screenshot.png" alt="SIG-FI Compass uygulama ekranı" onerror="this.parentElement.style.display='flex';this.parentElement.style.alignItems='center';this.parentElement.style.justifyContent='center';this.replaceWith(Object.assign(document.createElement('div'),{style:'color:#8d97b8;font-family:JetBrains Mono;font-size:12px;text-align:center;padding:20px',innerText:'assets/hero-screenshot.png\n(ekran görüntüsünü buraya ekle)'}))">
+    <img src="hero-screenshot.png" alt="SIG-FI Compass uygulama ekranı" onerror="this.parentElement.style.display='flex';this.parentElement.style.alignItems='center';this.parentElement.style.justifyContent='center';this.replaceWith(Object.assign(document.createElement('div'),{style:'color:#8d97b8;font-family:JetBrains Mono;font-size:12px;text-align:center;padding:20px',innerText:'hero-screenshot.png\n(ekran görüntüsünü buraya ekle)'}))">
   </div>
 </section>
 
@@ -297,19 +297,19 @@ footer a:hover{color:var(--ember-2);}
   </div>
   <div class="gallery">
     <figure>
-      <div class="shot"><img src="assets/shot-1.png" alt="Sinyal yönü bulma ekranı" onerror="this.style.opacity=0.15"></div>
+      <div class="shot"><img src="shot-1.png" alt="Sinyal yönü bulma ekranı" onerror="this.style.opacity=0.15"></div>
       <figcaption id="shot1-cap">Uygun Yön'ü bulmaya yardımcı olan ekran</figcaption>
     </figure>
     <figure>
-      <div class="shot"><img src="assets/shot-2.png" alt="Hız testi ekranı" onerror="this.style.opacity=0.15"></div>
+      <div class="shot"><img src="shot-2.png" alt="Hız testi ekranı" onerror="this.style.opacity=0.15"></div>
       <figcaption id="shot2-cap">dBm, ms ve Mbps değerlerini takip edin</figcaption>
     </figure>
     <figure>
-      <div class="shot"><img src="assets/shot-3.png" alt="Pusula ekranı" onerror="this.style.opacity=0.15"></div>
+      <div class="shot"><img src="shot-3.png" alt="Pusula ekranı" onerror="this.style.opacity=0.15"></div>
       <figcaption id="shot3-cap">360° pusula ile cihazınızı farklı yönlere çevirerek ölçüm yapın</figcaption>
     </figure>
     <figure>
-      <div class="shot"><img src="assets/shot-4.png" alt="Dil seçim ekranı" onerror="this.style.opacity=0.15"></div>
+      <div class="shot"><img src="shot-4.png" alt="Dil seçim ekranı" onerror="this.style.opacity=0.15"></div>
       <figcaption id="shot4-cap">5 dilde kullanın</figcaption>
     </figure>
   </div>
@@ -359,8 +359,9 @@ const SITE_CONFIG = {
   // örnek: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" ise ID'si "dQw4w9WgXcQ"
   youtubeVideoId: "", // <-- kendi video ID'nle değiştir, boş bırakırsan video kutusu boş görünür
 
-  // Ekran görüntüleri: assets klasörüne şu isimlerle dosya yükle:
+  // Ekran görüntüleri: repo'nun ANA DİZİNİNE (klasör açmadan) şu isimlerle dosya yükle:
   // hero-screenshot.png, shot-1.png, shot-2.png, shot-3.png, shot-4.png
+  // GitHub'da "Add file > Upload files" ekranına sürükleyip bırakman yeterli.
 };
 
 const ICONS = {
