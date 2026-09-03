@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIG-FI Compass - Gerçek Zamanlı Sinyal ve Yön Bulucu</title>
+<meta name="description" content="Cihazınızı çevirerek en güçlü mobil şebeke yönünü tespit edin. dBm, ms ve Mbps değerlerini canlı takip edin. Kamp, karavan ve doğa tutkunları için tasarlandı.">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="SIG-FI Compass - Gerçek Zamanlı Sinyal ve Yön Bulucu">
+<meta property="og:description" content="Cihazınızı çevirerek en güçlü mobil şebeke yönünü tespit edin. dBm, ms ve Mbps değerlerini canlı takip edin.">
+<meta property="og:url" content="https://sigficompass.github.io/">
+<meta property="og:site_name" content="SIG-FI Compass">
+<meta property="og:image" content="assets/og-cover.jpg">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SIG-FI Compass - Gerçek Zamanlı Sinyal ve Yön Bulucu">
+<meta name="twitter:description" content="Cihazınızı çevirerek en güçlü mobil şebeke yönünü tespit edin.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+
+/* ==========================================================================
+   TASARIM DEĞİŞKENLERİ — renkleri buradan değiştirebilirsin
+   ========================================================================== */
+:root{
+  --sky:      #0a1020;
+  --sky-2:    #0f1830;
+  --card:     #121c38;
+  --line:     #223056;
+  --ink:      #eef1fb;
+  --ink-dim:  #8d97b8;
+  --ember:    #e8a33d;
+  --ember-2:  #f6c877;
+  --signal:   #4fd1a5;
+  --radius:   14px;
+  --serif:    'Fraunces', Georgia, serif;
+  --sans:     'Inter', -apple-system, "Segoe UI", sans-serif;
+  --mono:     'JetBrains Mono', ui-monospace, monospace;
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:
+    radial-gradient(1200px 600px at 85% -10%, rgba(232,163,61,0.08), transparent 60%),
+    radial-gradient(900px 500px at -10% 20%, rgba(79,209,165,0.06), transparent 55%),
+    var(--sky);
+  color:var(--ink);
+  font-family:var(--sans);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit;}
+img{max-width:100%;display:block;}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px;}
+
+header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:22px 0;border-bottom:1px solid var(--line);
+}
+.brand{display:flex;align-items:center;gap:10px;}
+.brand-mark{
+  width:34px;height:34px;border-radius:9px;
+  background:conic-gradient(from 210deg, var(--ember), var(--signal), var(--ember));
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-weight:600;font-size:13px;color:var(--sky);
+}
+.brand-name{font-family:var(--serif);font-weight:600;font-size:19px;letter-spacing:0.2px;}
+
+.header-right{display:flex;align-items:center;gap:18px;}
+.social-row{display:flex;gap:14px;}
+.social-row a{
+  width:34px;height:34px;border-radius:50%;border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--ink-dim);transition:.18s ease;
+}
+.social-row a:hover{border-color:var(--ember);color:var(--ember);transform:translateY(-2px);}
+.social-row svg{width:16px;height:16px;fill:currentColor;}
+
+.lang-btn{
+  background:transparent;color:var(--ink);border:1px solid var(--line);
+  padding:8px 14px;border-radius:999px;cursor:pointer;
+  font-family:var(--sans);font-weight:600;font-size:13px;
+}
+.lang-btn:hover{border-color:var(--ember);}
+
+.hero{
+  display:grid;grid-template-columns:1.1fr 0.9fr;gap:56px;
+  align-items:center;padding:88px 0 96px;
+}
+.eyebrow{
+  font-family:var(--mono);font-size:12.5px;color:var(--signal);
+  letter-spacing:.04em;margin-bottom:18px;
+}
+.hero h1{
+  font-family:var(--serif);font-weight:600;font-size:clamp(34px,4.6vw,54px);
+  line-height:1.08;margin:0 0 22px;max-width:11ch;
+}
+.hero p{
+  color:var(--ink-dim);font-size:17px;max-width:46ch;margin:0 0 34px;
+}
+.cta-row{display:flex;gap:14px;flex-wrap:wrap;align-items:center;}
+.btn-play{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--ember);color:#181008;
+  padding:14px 24px;border-radius:11px;text-decoration:none;
+  font-weight:700;font-size:15.5px;transition:.18s ease;
+}
+.btn-play:hover{background:var(--ember-2);transform:translateY(-1px);}
+.btn-secondary{
+  display:inline-flex;align-items:center;gap:8px;
+  color:var(--ink-dim);text-decoration:none;font-size:14.5px;font-weight:600;
+  border-bottom:1px solid var(--line);padding-bottom:2px;
+}
+.btn-secondary:hover{color:var(--ink);border-color:var(--ink-dim);}
+
+.hero-visual{
+  position:relative;border-radius:22px;overflow:hidden;
+  border:1px solid var(--line);
+  background:var(--sky-2);
+  aspect-ratio:9/16;max-width:300px;justify-self:center;
+  box-shadow:0 30px 60px -20px rgba(0,0,0,.6);
+}
+.hero-visual img{width:100%;height:100%;object-fit:cover;}
+.hero-visual .badge{
+  position:absolute;top:14px;left:14px;
+  font-family:var(--mono);font-size:11px;color:var(--signal);
+  background:rgba(10,16,32,.7);border:1px solid var(--line);
+  padding:5px 9px;border-radius:999px;
+}
+
+.metric-strip{
+  display:flex;gap:28px;flex-wrap:wrap;padding:26px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+}
+.metric{font-family:var(--mono);font-size:13px;color:var(--ink-dim);}
+.metric b{color:var(--signal);font-weight:600;}
+
+.section{padding:96px 0;}
+.section-head{max-width:56ch;margin-bottom:48px;}
+.section-head .eyebrow{margin-bottom:12px;}
+.section-head h2{
+  font-family:var(--serif);font-weight:600;font-size:clamp(26px,3vw,36px);
+  margin:0 0 14px;line-height:1.15;
+}
+.section-head p{color:var(--ink-dim);font-size:15.5px;margin:0;}
+
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;}
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:26px;
+}
+.card h3{font-family:var(--serif);font-weight:600;font-size:18px;margin:0 0 10px;color:var(--ember-2);}
+.card p{color:var(--ink-dim);font-size:14.5px;margin:0;}
+
+.gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.gallery figure{margin:0;}
+.gallery .shot{
+  border-radius:16px;overflow:hidden;border:1px solid var(--line);
+  aspect-ratio:9/17;background:var(--sky-2);
+}
+.gallery .shot img{width:100%;height:100%;object-fit:cover;}
+.gallery figcaption{margin-top:10px;font-size:13px;color:var(--ink-dim);text-align:center;}
+
+.video-frame{
+  position:relative;width:100%;aspect-ratio:16/9;
+  border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);
+  background:var(--sky-2);
+}
+.video-frame iframe{width:100%;height:100%;border:0;}
+
+.social-band{
+  display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center;
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:30px 34px;
+}
+.social-band h3{font-family:var(--serif);font-weight:600;font-size:20px;margin:0 0 6px;}
+.social-band p{color:var(--ink-dim);font-size:14.5px;margin:0;}
+.social-band .social-row a{width:42px;height:42px;}
+.social-band .social-row svg{width:19px;height:19px;}
+
+footer{
+  border-top:1px solid var(--line);padding:36px 0;
+  display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;
+  color:var(--ink-dim);font-size:13.5px;
+}
+footer a{color:var(--ink-dim);text-decoration:underline;text-underline-offset:3px;}
+footer a:hover{color:var(--ember-2);}
+
+@media (max-width:860px){
+  .hero{grid-template-columns:1fr;padding:56px 0 64px;}
+  .hero-visual{order:-1;max-width:220px;}
+  .gallery{grid-template-columns:repeat(2,1fr);}
+  .section{padding:64px 0;}
+}
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <div class="brand">
+    <div class="brand-mark">SF</div>
+    <div class="brand-name">SIG-FI Compass</div>
+  </div>
+  <div class="header-right">
+    <div class="social-row" id="social-row-top"></div>
+    <button class="lang-btn" onclick="toggleLanguage()" id="lang-toggle-btn">🇹🇷 TR</button>
+  </div>
+</header>
+
+<section class="hero wrap">
+  <div>
+    <div class="eyebrow" id="eyebrow-text">// GERÇEK ZAMANLI SİNYAL TAKİBİ</div>
+    <h1 id="hero-title">En güçlü sinyali bulmanın pusulası</h1>
+    <p id="hero-desc">Cihazınızı çevirerek en güçlü mobil şebeke yönünü tespit edin. dBm, ms ve Mbps değerlerini canlı takip edin. Kamp, karavan ve doğa tutkunları için özel olarak tasarlandı.</p>
+    <div class="cta-row">
+      <a href="https://play.google.com/store/apps/details?id=com.sigfi.finder" target="_blank" rel="noopener" class="btn-play" id="btn-text">
+        ▶ Google Play'den İndir
+      </a>
+      <a href="#gallery" class="btn-secondary" id="btn-screenshots">Ekran görüntülerini gör</a>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <span class="badge">CANLI ÖLÇÜM</span>
+    <img src="assets/hero-screenshot.png" alt="SIG-FI Compass uygulama ekranı" onerror="this.parentElement.style.display='flex';this.parentElement.style.alignItems='center';this.parentElement.style.justifyContent='center';this.replaceWith(Object.assign(document.createElement('div'),{style:'color:#8d97b8;font-family:JetBrains Mono;font-size:12px;text-align:center;padding:20px',innerText:'assets/hero-screenshot.png\n(ekran görüntüsünü buraya ekle)'}))">
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="metric-strip">
+    <div class="metric">DBM <b>-71</b> UYGUN</div>
+    <div class="metric">MS <b>52</b> HIZLI</div>
+    <div class="metric">MBPS <b>18.4</b> GÜÇLÜ</div>
+    <div class="metric">5 DİL DESTEĞİ · SIFIR REKLAM</div>
+  </div>
+</div>
+
+<section class="section wrap" id="features">
+  <div class="section-head">
+    <div class="eyebrow" id="features-eyebrow">// NEDEN SIG-FI COMPASS</div>
+    <h2 id="features-title">Şebekesiz kalmak artık şansa kalmasın</h2>
+    <p id="features-sub">Dört basit özellik, kırsalda veya kalabalıkta doğru yönü bulmanı sağlar.</p>
+  </div>
+  <div class="features">
+    <div class="card">
+      <h3 id="f1-title">360° Sinyal Pusulası</h3>
+      <p id="f1-desc">Cihaz hareketine duyarlı yönlendirme sistemi ile sinyalin en güçlü olduğu açıyı fiziksel olarak tespit edin.</p>
+    </div>
+    <div class="card">
+      <h3 id="f2-title">Canlı Ağ Ölçümü</h3>
+      <p id="f2-desc">Sinyal seviyesi (dBm), bağlantı gecikmesi (ms/Ping) ve veri indirme hızını (Mbps) anlık olarak ölçün.</p>
+    </div>
+    <div class="card">
+      <h3 id="f3-title">Off-Grid & Kamp Odaklı</h3>
+      <p id="f3-desc">Karavan, doğa yürüyüşü, tekne ve kırsal alanlarda şebekenin zayıf olduğu noktalarda ideal bağlantı yönünü bulun.</p>
+    </div>
+    <div class="card">
+      <h3 id="f4-title">%100 Gizlilik, Sıfır Reklam</h3>
+      <p id="f4-desc">Kişisel veri toplanmaz, GPS konumunuz saklanmaz ve uygulama içerisinde hiçbir reklam bulunmaz.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section wrap" id="gallery">
+  <div class="section-head">
+    <div class="eyebrow" id="gallery-eyebrow">// UYGULAMADAN GÖRÜNTÜLER</div>
+    <h2 id="gallery-title">Arayüzü yakından incele</h2>
+    <p id="gallery-sub">Dört görüntü ile SIG-FI Compass'ın nasıl çalıştığını gör.</p>
+  </div>
+  <div class="gallery">
+    <figure>
+      <div class="shot"><img src="assets/shot-1.png" alt="Sinyal yönü bulma ekranı" onerror="this.style.opacity=0.15"></div>
+      <figcaption id="shot1-cap">Uygun sinyal yönünü bul</figcaption>
+    </figure>
+    <figure>
+      <div class="shot"><img src="assets/shot-2.png" alt="Hız testi ekranı" onerror="this.style.opacity=0.15"></div>
+      <figcaption id="shot2-cap">dBm, ms ve Mbps ölç</figcaption>
+    </figure>
+    <figure>
+      <div class="shot"><img src="assets/shot-3.png" alt="Pusula ekranı" onerror="this.style.opacity=0.15"></div>
+      <figcaption id="shot3-cap">360° pusula ile yönel</figcaption>
+    </figure>
+    <figure>
+      <div class="shot"><img src="assets/shot-4.png" alt="Dil seçim ekranı" onerror="this.style.opacity=0.15"></div>
+      <figcaption id="shot4-cap">5 dilde kullan</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="section wrap" id="video">
+  <div class="section-head">
+    <div class="eyebrow" id="video-eyebrow">// UYGULAMAYI İZLE</div>
+    <h2 id="video-title">30 saniyede SIG-FI Compass</h2>
+    <p id="video-sub">Uygulamanın gerçek kullanımını gösteren kısa tanıtım videosu.</p>
+  </div>
+  <div class="video-frame">
+    <iframe id="yt-frame" src="" title="SIG-FI Compass tanıtım videosu" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  </div>
+</section>
+
+<section class="section wrap" id="follow">
+  <div class="social-band">
+    <div>
+      <h3 id="social-band-title">Gelişmeleri sosyal medyadan takip et</h3>
+      <p id="social-band-sub">Yeni özellikler, ipuçları ve güncellemeler için bizi takip et.</p>
+    </div>
+    <div class="social-row" id="social-row-bottom"></div>
+  </div>
+</section>
+
+<footer class="wrap">
+  <p>© 2026 SIG-FI. Tüm hakları saklıdır. | <a href="https://sigficompass.github.io/sigfi-compass-legal/privacy_policy.html" target="_blank" id="privacy-link">Gizlilik Politikası</a></p>
+  <p id="contact-line">sigficompass@gmail.com</p>
+</footer>
+
+<script>
+/* ==========================================================================
+   SITE_CONFIG — İÇERİĞİ BURADAN GÜNCELLE
+   Kod bilmesen bile sadece bu bölümdeki tırnak içindeki linkleri/isimleri
+   değiştirmen yeterli. HTML/CSS kısımlarına dokunmana gerek yok.
+   ========================================================================== */
+const SITE_CONFIG = {
+  social: {
+    instagram: "https://instagram.com/sigficompass",
+    facebook:  "https://facebook.com/sigficompass",
+    youtube:   "https://youtube.com/@sigficompass",
+    twitter:   "https://x.com/sigficompass"
+  },
+
+  // YouTube tanıtım videosu — sadece video ID'sini yaz
+  // örnek: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" ise ID'si "dQw4w9WgXcQ"
+  youtubeVideoId: "", // <-- kendi video ID'nle değiştir, boş bırakırsan video kutusu boş görünür
+
+  // Ekran görüntüleri: assets klasörüne şu isimlerle dosya yükle:
+  // hero-screenshot.png, shot-1.png, shot-2.png, shot-3.png, shot-4.png
+};
+
+const ICONS = {
+  instagram: '<svg viewBox="0 0 24 24"><path d="M12 2c2.7 0 3.06.01 4.12.06 1.06.05 1.79.22 2.43.47.66.26 1.22.6 1.77 1.15.55.55.9 1.11 1.15 1.77.25.64.42 1.37.47 2.43.05 1.06.06 1.42.06 4.12s-.01 3.06-.06 4.12c-.05 1.06-.22 1.79-.47 2.43a4.9 4.9 0 01-1.15 1.77 4.9 4.9 0 01-1.77 1.15c-.64.25-1.37.42-2.43.47-1.06.05-1.42.06-4.12.06s-3.06-.01-4.12-.06c-1.06-.05-1.79-.22-2.43-.47a4.9 4.9 0 01-1.77-1.15 4.9 4.9 0 01-1.15-1.77c-.25-.64-.42-1.37-.47-2.43C2.01 15.06 2 14.7 2 12s.01-3.06.06-4.12c.05-1.06.22-1.79.47-2.43.26-.66.6-1.22 1.15-1.77A4.9 4.9 0 015.45 2.53c.64-.25 1.37-.42 2.43-.47C8.94 2.01 9.3 2 12 2zm0 1.8c-2.65 0-2.99.01-4.04.06-.86.04-1.32.18-1.63.3-.41.16-.7.35-1.01.66-.31.31-.5.6-.66 1.01-.12.31-.26.77-.3 1.63C4.31 9.01 4.3 9.35 4.3 12s.01 2.99.06 4.04c.04.86.18 1.32.3 1.63.16.41.35.7.66 1.01.31.31.6.5 1.01.66.31.12.77.26 1.63.3 1.05.05 1.39.06 4.04.06s2.99-.01 4.04-.06c.86-.04 1.32-.18 1.63-.3.41-.16.7-.35 1.01-.66.31-.31.5-.6.66-1.01.12-.31.26-.77.3-1.63.05-1.05.06-1.39.06-4.04s-.01-2.99-.06-4.04c-.04-.86-.18-1.32-.3-1.63a2.7 2.7 0 00-.66-1.01 2.7 2.7 0 00-1.01-.66c-.31-.12-.77-.26-1.63-.3C14.99 3.81 14.65 3.8 12 3.8zm0 3.06a5.14 5.14 0 110 10.28 5.14 5.14 0 010-10.28zm0 1.8a3.34 3.34 0 100 6.68 3.34 3.34 0 000-6.68zm5.34-1.99a1.2 1.2 0 11-2.4 0 1.2 1.2 0 012.4 0z"/></svg>',
+  facebook:  '<svg viewBox="0 0 24 24"><path d="M13.5 21v-8.1h2.72l.4-3.16h-3.12V7.73c0-.92.25-1.54 1.57-1.54h1.68V3.37C15.98 3.26 15.06 3.2 14 3.2c-2.55 0-4.3 1.56-4.3 4.42v2.32H7v3.16h2.7V21h3.8z"/></svg>',
+  youtube:   '<svg viewBox="0 0 24 24"><path d="M21.6 7.2s-.21-1.5-.86-2.16c-.82-.87-1.74-.87-2.16-.92C15.6 4 12 4 12 4h-.01s-3.6 0-6.58.12c-.42.05-1.34.05-2.16.92-.65.66-.86 2.16-.86 2.16S2.16 8.94 2.16 10.68v1.63c0 1.74.23 3.48.23 3.48s.21 1.5.86 2.16c.82.87 1.9.84 2.38.93 1.73.17 7.35.22 7.35.22s3.6-.01 6.58-.13c.42-.05 1.34-.05 2.16-.92.65-.66.86-2.16.86-2.16s.23-1.74.23-3.48v-1.63c0-1.74-.23-3.48-.23-3.48zM9.98 14.98V8.7l5.4 3.15-5.4 3.13z"/></svg>',
+  twitter:   '<svg viewBox="0 0 24 24"><path d="M18.9 3H21l-6.55 7.49L22.2 21H16.2l-4.7-6.15L6.1 21H4l7-8.01L2.9 3h6.15l4.25 5.63L18.9 3zm-1.05 16.17h1.15L7.2 4.75H5.97l11.88 14.42z"/></svg>'
+};
+
+function renderSocialRow(containerId){
+  const el = document.getElementById(containerId);
+  if(!el) return;
+  el.innerHTML = '';
+  Object.entries(SITE_CONFIG.social).forEach(([key, url]) => {
+    if(!url) return;
+    const a = document.createElement('a');
+    a.href = url; a.target = '_blank'; a.rel = 'noopener';
+    a.setAttribute('aria-label', key);
+    a.innerHTML = ICONS[key] || '';
+    el.appendChild(a);
+  });
+}
+renderSocialRow('social-row-top');
+renderSocialRow('social-row-bottom');
+
+if (SITE_CONFIG.youtubeVideoId) {
+  document.getElementById('yt-frame').src = `https://www.youtube.com/embed/${SITE_CONFIG.youtubeVideoId}`;
+}
+
+let currentLang = 'tr';
+const content = {
+  tr: {
+    eyebrow: "// GERÇEK ZAMANLI SİNYAL TAKİBİ",
+    heroTitle: "En güçlü sinyali bulmanın pusulası",
+    heroDesc: "Cihazınızı çevirerek en güçlü mobil şebeke yönünü tespit edin. dBm, ms ve Mbps değerlerini canlı takip edin. Kamp, karavan ve doğa tutkunları için özel olarak tasarlandı.",
+    btnText: "▶ Google Play'den İndir",
+    btnScreenshots: "Ekran görüntülerini gör",
+    featuresEyebrow: "// NEDEN SIG-FI COMPASS",
+    featuresTitle: "Şebekesiz kalmak artık şansa kalmasın",
+    featuresSub: "Dört basit özellik, kırsalda veya kalabalıkta doğru yönü bulmanı sağlar.",
+    f1Title: "360° Sinyal Pusulası", f1Desc: "Cihaz hareketine duyarlı yönlendirme sistemi ile sinyalin en güçlü olduğu açıyı fiziksel olarak tespit edin.",
+    f2Title: "Canlı Ağ Ölçümü", f2Desc: "Sinyal seviyesi (dBm), bağlantı gecikmesi (ms/Ping) ve veri indirme hızını (Mbps) anlık olarak ölçün.",
+    f3Title: "Off-Grid & Kamp Odaklı", f3Desc: "Karavan, doğa yürüyüşü, tekne ve kırsal alanlarda şebekenin zayıf olduğu noktalarda ideal bağlantı yönünü bulun.",
+    f4Title: "%100 Gizlilik, Sıfır Reklam", f4Desc: "Kişisel veri toplanmaz, GPS konumunuz saklanmaz ve uygulama içerisinde hiçbir reklam bulunmaz.",
+    galleryEyebrow: "// UYGULAMADAN GÖRÜNTÜLER",
+    galleryTitle: "Arayüzü yakından incele",
+    gallerySub: "Dört görüntü ile SIG-FI Compass'ın nasıl çalıştığını gör.",
+    shot1: "Uygun sinyal yönünü bul", shot2: "dBm, ms ve Mbps ölç", shot3: "360° pusula ile yönel", shot4: "5 dilde kullan",
+    videoEyebrow: "// UYGULAMAYI İZLE",
+    videoTitle: "30 saniyede SIG-FI Compass",
+    videoSub: "Uygulamanın gerçek kullanımını gösteren kısa tanıtım videosu.",
+    socialBandTitle: "Gelişmeleri sosyal medyadan takip et",
+    socialBandSub: "Yeni özellikler, ipuçları ve güncellemeler için bizi takip et.",
+    privacyLink: "Gizlilik Politikası",
+    langBtn: "🇹🇷 TR"
+  },
+  en: {
+    eyebrow: "// REAL-TIME SIGNAL TRACKING",
+    heroTitle: "The compass for finding your strongest signal",
+    heroDesc: "Find the strongest network signal by turning your device. Track real-time dBm, latency (ms), and speed (Mbps). Built for outdoor enthusiasts, campers, and RVers.",
+    btnText: "▶ Get it on Google Play",
+    btnScreenshots: "See screenshots",
+    featuresEyebrow: "// WHY SIG-FI COMPASS",
+    featuresTitle: "Never leave connectivity to chance again",
+    featuresSub: "Four simple features to help you find the right direction, in the countryside or in a crowd.",
+    f1Title: "360° Signal Compass", f1Desc: "Locate the optimal signal angle physically with motion-sensitive compass guidance.",
+    f2Title: "Live Network Metrics", f2Desc: "Monitor real-time signal strength (dBm), latency (ms/ping), and download speed (Mbps).",
+    f3Title: "Built for Off-Grid Life", f3Desc: "Ideal for camping, RVs, overlanding, boating, and rural areas with weak coverage.",
+    f4Title: "100% Private & Ad-Free", f4Desc: "No personal data collection, no GPS tracking stored, and absolutely no ads.",
+    galleryEyebrow: "// IN-APP SCREENS",
+    galleryTitle: "Take a closer look",
+    gallerySub: "Four screens showing how SIG-FI Compass works.",
+    shot1: "Find the right signal direction", shot2: "Measure dBm, ms & Mbps", shot3: "Navigate with a 360° compass", shot4: "Use it in 5 languages",
+    videoEyebrow: "// WATCH IT IN ACTION",
+    videoTitle: "SIG-FI Compass in 30 seconds",
+    videoSub: "A short walkthrough of the app in real use.",
+    socialBandTitle: "Follow along for updates",
+    socialBandSub: "New features, tips, and release notes.",
+    privacyLink: "Privacy Policy",
+    langBtn: "🇬🇧 EN"
+  }
+};
+
+function toggleLanguage(){
+  currentLang = currentLang === 'tr' ? 'en' : 'tr';
+  const c = content[currentLang];
+  document.documentElement.lang = currentLang;
+  document.getElementById('eyebrow-text').innerText = c.eyebrow;
+  document.getElementById('hero-title').innerText = c.heroTitle;
+  document.getElementById('hero-desc').innerText = c.heroDesc;
+  document.getElementById('btn-text').innerText = c.btnText;
+  document.getElementById('btn-screenshots').innerText = c.btnScreenshots;
+  document.getElementById('features-eyebrow').innerText = c.featuresEyebrow;
+  document.getElementById('features-title').innerText = c.featuresTitle;
+  document.getElementById('features-sub').innerText = c.featuresSub;
+  document.getElementById('f1-title').innerText = c.f1Title; document.getElementById('f1-desc').innerText = c.f1Desc;
+  document.getElementById('f2-title').innerText = c.f2Title; document.getElementById('f2-desc').innerText = c.f2Desc;
+  document.getElementById('f3-title').innerText = c.f3Title; document.getElementById('f3-desc').innerText = c.f3Desc;
+  document.getElementById('f4-title').innerText = c.f4Title; document.getElementById('f4-desc').innerText = c.f4Desc;
+  document.getElementById('gallery-eyebrow').innerText = c.galleryEyebrow;
+  document.getElementById('gallery-title').innerText = c.galleryTitle;
+  document.getElementById('gallery-sub').innerText = c.gallerySub;
+  document.getElementById('shot1-cap').innerText = c.shot1;
+  document.getElementById('shot2-cap').innerText = c.shot2;
+  document.getElementById('shot3-cap').innerText = c.shot3;
+  document.getElementById('shot4-cap').innerText = c.shot4;
+  document.getElementById('video-eyebrow').innerText = c.videoEyebrow;
+  document.getElementById('video-title').innerText = c.videoTitle;
+  document.getElementById('video-sub').innerText = c.videoSub;
+  document.getElementById('social-band-title').innerText = c.socialBandTitle;
+  document.getElementById('social-band-sub').innerText = c.socialBandSub;
+  document.getElementById('privacy-link').innerText = c.privacyLink;
+  document.getElementById('lang-toggle-btn').innerText = c.langBtn;
+}
+</script>
+</body>
+</html>
